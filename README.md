@@ -28,6 +28,55 @@ terraform {
 
 Where does one store the Terraform state of the infrastructure for storing Terraform state? Answer: locally. Before using the Amazon S3 bucket and DynamoDB table created by this module to store its own state, you must first store state on the local filesystem. Thereafter, state can be stored using the S3 backend.
 
+**Step 1**: Initialize Terraform using local backend
+
+```
+$ terraform init
+Initializing modules...
+...
+
+Initializing the backend...
+...
+
+Terraform has been successfully initialized!
+```
+
+**Step 2**: Apply state
+
+```
+$ terraform apply
+...
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+```
+
+**Step 3**: Reconfigure Terraform with S3 backend
+
+```hcl
+terraform {
+  backend "s3" {
+    bucket         = "<s3_bucket>"
+    key            = "<path/to/key>"
+    region         = "us-east-1"
+    dynamodb_table = "<dynamodb_table>"
+  }
+}
+```
+
+```
+$ terraform init -reconfigure
+Initializing modules...
+
+Initializing the backend...
+Do you want to copy existing state to the new backend?
+  Pre-existing state was found while migrating the previous "local" backend to the
+  newly configured "s3" backend. No existing state was found in the newly
+  configured "s3" backend. Do you want to copy this state to the new "s3"
+  backend? Enter "yes" to copy and "no" to start with an empty state.
+
+  Enter a value: yes
+```
+
 ## Terraform Module Documentation
 
 <!-- BEGIN_TF_DOCS -->
