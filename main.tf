@@ -51,7 +51,7 @@ resource "aws_s3_bucket" "s3_bucket" {
 # Contains Terraform state lock.
 # -----------------------------------------------------------------------------
 resource "aws_dynamodb_table" "dynamodb_table" {
-  name = "terraform-${var.ACCOUNT_NAME}"
+  name = var.dynamodb_table
 
   # billing_mode specifies how you are charged for read and write throughput
   # and how you manage capacity.
